@@ -1,11 +1,13 @@
 package com.example.demo.model;
 import java.time.LocalDate;
+import java.time.Period;
 
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 
 @javax.persistence.Entity
 @Table(name="students")
@@ -30,6 +32,8 @@ public class Student {
 	private String name;
 	private String email;
 	private LocalDate dob;
+//  https://www.youtube.com/watch?v=9SGDpanrc8U&t=3540s
+	@Transient
 	private Integer age;
 
 //in the tutorial, this does not exist but without this, an error triggered: No default constructor for entity:  : com.example.demo.model.Student; nested exception is org.hibernate.InstantiationException: 	
@@ -37,20 +41,19 @@ public class Student {
 public Student() {
 }
 	
-public Student(Long id, String name, String email, LocalDate dob, Integer age) {
+public Student(Long id, String name, String email, LocalDate dob) {
 		this.id = id;
 		this.name = name;
 		this.email = email;
 		this.dob = dob;
-		this.age = age;
+		
 }
 
 //for db. no id as it is automatically generated
-public Student(String name, String email, LocalDate dob, Integer age) {
+public Student(String name, String email, LocalDate dob) {
 	this.name = name;
 	this.email = email;
 	this.dob = dob;
-	this.age = age;
 }
 
 
@@ -87,7 +90,7 @@ public Student(String name, String email, LocalDate dob, Integer age) {
 	}
 
 	public Integer getAge() {
-		return age;
+		return Period.between(this.dob, LocalDate.now()).getYears();
 	}
 
 	public void setAge(Integer age) {
